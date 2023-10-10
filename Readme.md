@@ -1,7 +1,7 @@
 # Проект «Киноман»
 
 * Студент: [Николай Попков](https://up.htmlacademy.ru/ecmascript/21/user/281623).
-* Наставник: `Неизвестно`.
+* Наставник: [Олег Глущенко](https://htmlacademy.ru/profile/id305355).
 
 ---
 
