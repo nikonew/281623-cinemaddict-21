@@ -23,12 +23,13 @@ export default class Presenter {
   init() {
     this.filmsList = [...this.filmsModel.filmsCard];
 
-    for (let i = 0; i < this.filmsList.length; i++) {
-      render(new FilmsListView({film: this.filmsList[i]}), this.filmsListComponent.element);
-    }
-
     render(this.filter, this.container);
     render(this.sort, this.container);
+    render(this.filmsListComponent, this.container);
+
+    for (let i = 0; i < this.filmsList.length; i++) {
+      render(new FilmsListView({film: this.filmsList[i]}),this.filmsListComponent.element);
+    }
     render(this.button, this.container);
     render(this.headerProfile, this.header);
   }
