@@ -1,5 +1,5 @@
 
-import {render} from '../framework/render.js';
+import {render, RenderPosition} from '../framework/render.js';
 import ShowMoreButtonView from '../view/films-button-show-more.js';
 import FilmListContainerView from '../view/films-list-container.js';
 import FilmsListView from '../view/films-list.js';

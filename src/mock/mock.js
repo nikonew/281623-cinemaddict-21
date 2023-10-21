@@ -10,6 +10,16 @@ export const DESCRIPTIONS = [
   'Sed sed nisi sed augue convallis suscipit in sed felis'
 ];
 
+const POSTERS = [
+  'made-for-each-other.png',
+  'popeye-meets-sinbad.png',
+  'sagebrush-trail.jpg',
+  'santa-claus-conquers-the-martians.jpg',
+  'the-dance-of-life.jpg',
+  'the-great-flamarion.jpg',
+  'the-man-with-the-golden-arm.jpg'
+];
+
 const filmItems = [
   {
     'id': '0',
@@ -20,7 +30,7 @@ const filmItems = [
       'title': 'A Little Pony Without The Carpet',
       'alternativeTitle': 'Laziness Who Sold Themselves',
       'totalRating': getRandomInteger(0, 10),
-      'poster': 'images/posters/made-for-each-other.png',
+      'poster': 'santa-claus-conquers-the-martians.jpg',
       'ageRating': 0,
       'director': 'Tom Ford',
       'writers': [
@@ -37,7 +47,6 @@ const filmItems = [
       },
       'duration': 77,
       'genre': [
-        'Comedy',
         'Drama'
       ],
       'description': getRandomArrayElement(DESCRIPTIONS)
@@ -58,7 +67,7 @@ const filmItems = [
       'title': 'A Little Pony Without The Carpet',
       'alternativeTitle': 'Laziness Who Sold Themselves',
       'totalRating': getRandomInteger(0, 10),
-      'poster': 'images/posters/popeye-meets-sinbad.png',
+      'poster': 'sagebrush-trail.jpg',
       'ageRating': 0,
       'director': 'Tom Ford',
       'writers': [
@@ -95,7 +104,7 @@ const filmItems = [
       'title': 'A Little Pony Without The Carpet',
       'alternativeTitle': 'Laziness Who Sold Themselves',
       'totalRating': getRandomInteger(0, 10),
-      'poster': 'images/posters/santa-claus-conquers-the-martians.jpg',
+      'poster': 'made-for-each-other.png',
       'ageRating': 0,
       'director': 'Tom Ford',
       'writers': [
@@ -125,5 +134,5 @@ const filmItems = [
   }
 ];
 
-export const generateFilms = () => filmItems;
+export const generateFilms = () => getRandomArrayElement(filmItems);
 

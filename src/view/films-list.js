@@ -2,18 +2,19 @@ import {createElement} from '../framework/render.js';
 import AbstractView from '../framework/view/abstract-view.js';
 
 function createFilmsList (film){
+  const {filmInfo} = film;
   return (`
   <article class="film-card">
           <a class="film-card__link">
-            <h3 class="film-card__title">${film.title}</h3>
-            <p class="film-card__rating">${film.totalRating}</p>
+            <h3 class="film-card__title">${filmInfo.title}</h3>
+            <p class="film-card__rating">${filmInfo.totalRating}</p>
             <p class="film-card__info">
               <span class="film-card__year">1929</span>
               <span class="film-card__duration">1h 55m</span>
-              <span class="film-card__genre">${film.genre}</span>
+              <span class="film-card__genre">${filmInfo.genre}</span>
             </p>
             <img src="./images/posters/the-dance-of-life.jpg" alt="" class="film-card__poster">
-            <p class="film-card__description">${film.description}</p>
+            <p class="film-card__description">${filmInfo.description}</p>
             <span class="film-card__comments">5 comments</span>
           </a>
           <div class="film-card__controls">
