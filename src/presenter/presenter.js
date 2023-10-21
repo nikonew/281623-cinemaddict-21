@@ -1,5 +1,4 @@
-
-import {render, RenderPosition} from '../framework/render.js';
+import {render} from '../framework/render.js';
 import ShowMoreButtonView from '../view/films-button-show-more.js';
 import FilmListContainerView from '../view/films-list-container.js';
 import FilmsListView from '../view/films-list.js';
@@ -25,11 +24,12 @@ export default class Presenter {
 
     render(this.filter, this.container);
     render(this.sort, this.container);
-    render(this.filmsListComponent, this.container);
+
 
     for (let i = 0; i < this.filmsList.length; i++) {
       render(new FilmsListView({film: this.filmsList[i]}),this.filmsListComponent.element);
     }
+    render(this.filmsListComponent, this.container);
     render(this.button, this.container);
     render(this.headerProfile, this.header);
   }
