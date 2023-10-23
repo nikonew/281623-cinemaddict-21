@@ -8,10 +8,9 @@ function humanizeTimeFromTo(date) {
 }
 
 
-function createFilmsList (film){
+function createFilmsCard (film){
   const {filmInfo} = film;
   return (`
-<div class="films-list__container">
   <article class="film-card">
           <a class="film-card__link">
             <h3 class="film-card__title">${filmInfo.title}</h3>
@@ -30,11 +29,11 @@ function createFilmsList (film){
             <button class="film-card__controls-item film-card__controls-item--mark-as-watched" type="button">Mark as watched</button>
             <button class="film-card__controls-item film-card__controls-item--favorite" type="button">Mark as favorite</button>
           </div>
-        </article></div>`);
+        </article>`);
 }
 
 
-export default class FilmsListView extends AbstractView{
+export default class FilmsCardView extends AbstractView{
   #element = null;
   #film = null;
 
@@ -44,7 +43,7 @@ export default class FilmsListView extends AbstractView{
   }
 
   get template() {
-    return createFilmsList(this.#film);
+    return createFilmsCard(this.#film);
   }
 
   get element() {
