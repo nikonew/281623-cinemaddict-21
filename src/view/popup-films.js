@@ -168,6 +168,11 @@ function createPopupTemplate () {
 
 export default class PopupFilmsView extends AbstractView {
 
+  constructor(film) {
+    super();
+    console.log(film);
+  }
+
   get template() {
     return createPopupTemplate();
   }
