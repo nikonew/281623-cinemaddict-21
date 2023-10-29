@@ -47,7 +47,9 @@ const filmItems = [
       },
       'duration': 77,
       'genre': [
-        'Drama'
+        'Comedy',
+        'Drama',
+        'Mystery'
       ],
       'description': getRandomArrayElement(DESCRIPTIONS)
     },
@@ -84,7 +86,9 @@ const filmItems = [
       },
       'duration': 77,
       'genre': [
-        'Drama'
+        'Comedy',
+        'Drama',
+        'Mystery'
       ],
       'description': getRandomArrayElement(DESCRIPTIONS)
     },
@@ -121,7 +125,8 @@ const filmItems = [
       'duration': 77,
       'genre': [
         'Comedy',
-        'Drama'
+        'Drama',
+        'Mystery'
       ],
       'description': getRandomArrayElement(DESCRIPTIONS)
     },
