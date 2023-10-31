@@ -14,7 +14,7 @@ function createFilmsCard (film){
               <span class="film-card__duration">1H 55m</span>
               <span class="film-card__genre">${filmInfo.genre[2]}</span>
             </p>
-            <img src="./images/posters/the-dance-of-life.jpg" alt="" class="film-card__poster">
+            <img src="${filmInfo.poster}" alt="" class="film-card__poster">
             <p class="film-card__description">${filmInfo.description}</p>
             <span class="film-card__comments">5 comments</span>
           </a>
