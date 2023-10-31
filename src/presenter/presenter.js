@@ -48,7 +48,7 @@ export default class Presenter {
   };
 
   renderFilms (film) {
-    const filmComments = this.filmsModel.commentsList.filter((comment) => film.comments.includes(comment.id));
+    const filmComments = this.filmsModel.commentsList.filter((comment) => film.comments.includes(String(comment.id)));
     const popupPresenter = new FilmPopupPresenter({film, filmComments});
     const filmCard = new FilmsCardView({film});
 
@@ -60,7 +60,7 @@ export default class Presenter {
   }
 
   renderFilmsList () {
-    this.filmsList.map((film) => {
+    this.filmsList.slice(0, FILM_COUNT_PER_STEP).map((film) => {
       this.renderFilms(film);
     });
   }
