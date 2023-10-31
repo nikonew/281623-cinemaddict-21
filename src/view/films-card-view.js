@@ -1,11 +1,5 @@
 import {createElement} from '../framework/render.js';
 import AbstractView from '../framework/view/abstract-view.js';
-import dayjs from 'dayjs';
-import {getRandomArrayElement, getRandomInteger} from '../util.js';
-
-function humanizeTimeFromTo(date) {
-  return date ? dayjs(date).format(TIME_FORMAT) : '';
-}
 
 
 function createFilmsCard (film){
@@ -18,9 +12,9 @@ function createFilmsCard (film){
             <p class="film-card__info">
               <span class="film-card__year">1929</span>
               <span class="film-card__duration">1H 55m</span>
-              <span class="film-card__genre">${filmInfo.genre}</span>
+              <span class="film-card__genre">${filmInfo.genre[2]}</span>
             </p>
-            <img src="./images/posters/the-dance-of-life.jpg" alt="" class="film-card__poster">
+            <img src="${filmInfo.poster}" alt="" class="film-card__poster">
             <p class="film-card__description">${filmInfo.description}</p>
             <span class="film-card__comments">5 comments</span>
           </a>

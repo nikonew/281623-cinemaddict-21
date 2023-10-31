@@ -1,4 +1,3 @@
-import {createElement} from '../framework/render.js';
 import AbstractView from '../framework/view/abstract-view.js';
 
 function createButtonShowMoreTemplate () {
@@ -6,21 +5,20 @@ function createButtonShowMoreTemplate () {
 }
 
 export default class ShowMoreButtonView extends AbstractView {
-  #element = null;
+  #handleClick = null;
+
+  constructor({onClick}) {
+    super();
+    this.#handleClick = onClick;
+    this.element.addEventListener('click', this.#clickHandler);
+  }
 
   get template () {
     return createButtonShowMoreTemplate();
   }
 
-  get element() {
-    if (!this.#element) {
-      this.#element = createElement(this.template);
-    }
-
-    return this.#element;
-  }
-
-  removeElement() {
-    this.#element = null;
-  }
+  #clickHandler = (evt) => {
+    evt.preventDefault();
+    this.#handleClick();
+  };
 }

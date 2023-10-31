@@ -30,7 +30,7 @@ const filmItems = [
       'title': 'A Little Pony Without The Carpet',
       'alternativeTitle': 'Laziness Who Sold Themselves',
       'totalRating': getRandomInteger(0, 10),
-      'poster': 'santa-claus-conquers-the-martians.jpg',
+      'poster': `images/posters/${getRandomArrayElement(POSTERS)}`,
       'ageRating': 0,
       'director': 'Tom Ford',
       'writers': [
@@ -47,7 +47,9 @@ const filmItems = [
       },
       'duration': 77,
       'genre': [
-        'Drama'
+        'Comedy',
+        'Drama',
+        'Mystery'
       ],
       'description': getRandomArrayElement(DESCRIPTIONS)
     },
@@ -67,7 +69,7 @@ const filmItems = [
       'title': 'A Little Pony Without The Carpet',
       'alternativeTitle': 'Laziness Who Sold Themselves',
       'totalRating': getRandomInteger(0, 10),
-      'poster': 'sagebrush-trail.jpg',
+      'poster': `images/posters/${getRandomArrayElement(POSTERS)}`,
       'ageRating': 0,
       'director': 'Tom Ford',
       'writers': [
@@ -84,7 +86,9 @@ const filmItems = [
       },
       'duration': 77,
       'genre': [
-        'Drama'
+        'Comedy',
+        'Drama',
+        'Mystery'
       ],
       'description': getRandomArrayElement(DESCRIPTIONS)
     },
@@ -104,7 +108,7 @@ const filmItems = [
       'title': 'A Little Pony Without The Carpet',
       'alternativeTitle': 'Laziness Who Sold Themselves',
       'totalRating': getRandomInteger(0, 10),
-      'poster': 'made-for-each-other.png',
+      'poster': `images/posters/${getRandomArrayElement(POSTERS)}`,
       'ageRating': 0,
       'director': 'Tom Ford',
       'writers': [
@@ -121,7 +125,8 @@ const filmItems = [
       'duration': 77,
       'genre': [
         'Comedy',
-        'Drama'
+        'Drama',
+        'Mystery'
       ],
       'description': getRandomArrayElement(DESCRIPTIONS)
     },
