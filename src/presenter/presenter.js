@@ -1,4 +1,5 @@
 import {remove, render} from '../framework/render.js';
+import FilmTitleView from '../view/film-title-view.js';
 import ShowMoreButtonView from '../view/films-button-show-more.js';
 import FilmListView from '../view/films-list-view.js';
 import FilmsListContainerView from '../view/films-list-container.js';
@@ -16,20 +17,27 @@ export default class Presenter {
   filmsListTemplate = new FilmsListContainerView();
   headerProfile = new HeaderProfileView();
 
-  constructor({ container, filmsModel, header}) {
+  constructor({ container, filmsModel, header, filmFilters}) {
     this.header = header;
     this.container = container;
     this.filmsModel = filmsModel;
+    this.filmFilters = filmFilters;
   }
 
   init() {
     this.filmsList = [...this.filmsModel.filmsCard];
     this.renderFilmsList();
 
-
     render(this.filmsView, this.container);
     render(this.filmsListComponent, this.filmsView.element);
     render(this.filmsListTemplate, this.filmsListComponent.element);
+
+    if (this.filmsList.length === 0) {
+      const activeFilter = document.querySelector('.main-navigation__item--active').dataset.id;
+      render(new FilmTitleView(this.filmFilters, activeFilter), this.filmsListComponent.element);
+      return;
+    }
+
     if (this.filmsList.length > FILM_COUNT_PER_STEP) {
       this.button = new ShowMoreButtonView({onClick: this.handleLoadMoreButtonClick});
       render(this.button, this.filmsListComponent.element);

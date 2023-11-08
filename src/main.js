@@ -1,3 +1,4 @@
+import {generateFilmFilters} from './filters.js';
 import {render} from './framework/render.js';
 import Presenter from './presenter/presenter.js';
 import FilmsModel from './model/films-model.js';
@@ -8,13 +9,14 @@ import SortView from './view/sort-films.js';
 const headerElement = document.querySelector('header');
 const mainElement = document.querySelector('.main');
 const filmsModel = new FilmsModel();
+const filmFilters = generateFilmFilters(filmsModel.filmsCard);
 
 const presenter = new Presenter({
   header: headerElement,
-  container: mainElement, filmsModel,
+  container: mainElement, filmsModel, filmFilters,
 });
 
-render(new FilterFilmsView(), mainElement);
+render(new FilterFilmsView({filmFilters}), mainElement);
 render(new SortView(), mainElement);
 
 

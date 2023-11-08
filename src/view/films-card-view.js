@@ -3,7 +3,7 @@ import AbstractView from '../framework/view/abstract-view.js';
 
 
 function createFilmsCard (film){
-  const {filmInfo} = film;
+  const {filmInfo, userDetails} = film;
   return (`
   <article class="film-card">
           <a class="film-card__link">
@@ -19,9 +19,9 @@ function createFilmsCard (film){
             <span class="film-card__comments">5 comments</span>
           </a>
           <div class="film-card__controls">
-            <button class="film-card__controls-item film-card__controls-item--add-to-watchlist" type="button">Add to watchlist</button>
-            <button class="film-card__controls-item film-card__controls-item--mark-as-watched" type="button">Mark as watched</button>
-            <button class="film-card__controls-item film-card__controls-item--favorite" type="button">Mark as favorite</button>
+            <button class="film-card__controls-item film-card__controls-item--add-to-watchlist ${userDetails.watchlist ? 'film-card__controls-item--active' : ''}" type="button">Add to watchlist</button>
+            <button class="film-card__controls-item film-card__controls-item--mark-as-watched ${userDetails.alreadyWatched ? 'film-card__controls-item--active' : ''}" type="button">Mark as watched</button>
+            <button class="film-card__controls-item film-card__controls-item--favorite ${userDetails.favorite ? 'film-card__controls-item--active' : ''}" type="button">Mark as favorite</button>
           </div>
         </article>`);
 }
