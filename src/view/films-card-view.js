@@ -19,32 +19,43 @@ function createFilmsCard (film){
             <span class="film-card__comments">5 comments</span>
           </a>
           <div class="film-card__controls">
-            <button class="film-card__controls-item film-card__controls-item--add-to-watchlist ${userDetails.watchlist ? 'film-card__controls-item--active' : ''}" type="button">Add to watchlist</button>
-            <button class="film-card__controls-item film-card__controls-item--mark-as-watched ${userDetails.alreadyWatched ? 'film-card__controls-item--active' : ''}" type="button">Mark as watched</button>
-            <button class="film-card__controls-item film-card__controls-item--favorite ${userDetails.favorite ? 'film-card__controls-item--active' : ''}" type="button">Mark as favorite</button>
+            <button class="film-card__controls-item film-card__controls-item--add-to-watchlist ${userDetails.watchlist ? 'film-card__controls-item--active' : ''}" data-user-detail="watchlist" type="button">Add to watchlist</button>
+            <button class="film-card__controls-item film-card__controls-item--mark-as-watched ${userDetails.alreadyWatched ? 'film-card__controls-item--active' : ''}" data-user-detail="alreadyWatched" type="button">Mark as watched</button>
+            <button class="film-card__controls-item film-card__controls-item--favorite ${userDetails.favorite ? 'film-card__controls-item--active' : ''}" data-user-detail="favorite" type="button">Mark as favorite</button>
           </div>
         </article>`);
 }
 
 
 export default class FilmsCardView extends AbstractView{
-  #element = null;
   #film = null;
+  #handleClick = null;
+  #handleControlButtonClick = null;
 
-  constructor({film}) {
+
+  constructor({film,onClick, onControlBtnClick}) {
     super();
     this.#film = film;
+    this.#handleClick = onClick;
+    this.#handleControlButtonClick = onControlBtnClick;
+
+
+    this.element.querySelector('.film-card__link').addEventListener('click', this.#clickHandler);
+    this.element.querySelector('.film-card__controls').addEventListener('click', this.#controlButtonsClickHandler);
   }
 
   get template() {
     return createFilmsCard(this.#film);
   }
 
-  get element() {
-    if (!this.#element) {
-      this.#element = createElement(this.template);
-    }
+  #clickHandler = () => {
+    this.#handleClick();
+  };
 
-    return this.#element;
-  }
+  #controlButtonsClickHandler = (evt) => {
+    if (evt.target.classList.contains('film-card__controls-item')) {
+      this.#handleControlButtonClick(evt.target.dataset.userDetail);
+    }
+  };
+
 }

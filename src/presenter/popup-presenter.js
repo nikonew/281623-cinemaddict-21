@@ -3,33 +3,33 @@ import PopupFilmsView from '../view/popup-films.js';
 
 
 export default class FilmPopupPresenter {
+  #filmPopup = null;
 
-  constructor({ film, filmComments }) {
-    this.filmPopup = new PopupFilmsView({film, filmComments});
-    this.closeBtn = this.filmPopup.element.querySelector('.film-details__close-btn');
+  constructor({ film, filmComments, onControlBtnClick}) {
+    this.#filmPopup = new PopupFilmsView({film, filmComments,
+      onCloseClick: this.#closePopupClickHandler,onControlBtnClick,
+    });
   }
 
   showPopup() {
     document.body.classList.add('hide-overflow');
-    document.body.appendChild(this.filmPopup.element);
-    this.closeBtn.addEventListener('click', this.closePopupClickHandler);
-    document.addEventListener('keydown', this.escKeyDownHandler);
+    document.body.appendChild(this.#filmPopup.element);
+    document.addEventListener('keydown', this.#escKeyDownHandler);
   }
 
-  closePopup() {
+  #closePopup() {
     document.body.classList.remove('hide-overflow');
-    document.body.removeChild(this.filmPopup.element);
-    this.closeBtn.removeEventListener('click', this.closePopupClickHandler);
-    document.removeEventListener('keydown', this.escKeyDownHandler);
+    document.body.removeChild(this.#filmPopup.element);
+    document.removeEventListener('keydown', this.#escKeyDownHandler);
   }
 
-  closePopupClickHandler = () => {
-    this.closePopup();
+  #closePopupClickHandler = () => {
+    this.#closePopup();
   };
 
-  escKeyDownHandler = (evt) => {
+  #escKeyDownHandler = (evt) => {
     if (isEscapeKey(evt)) {
-      this.closePopup();
+      this.#closePopup();
     }
   };
 
