@@ -8,7 +8,6 @@ export default class FilmsFiltersPresenter {
   constructor({filtersContainer, films}) {
     this.#filtersContainer = filtersContainer;
     this.#films = films;
-
     this.init();
   }
 
