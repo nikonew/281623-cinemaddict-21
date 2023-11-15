@@ -46,6 +46,7 @@ export default class FilmsFiltersPresenter {
 
     this.#renderFilters();
     this.activeFilter = document.querySelector('.main-navigation__item--active').dataset.id;
+
   }
 
   #renderFilters() {

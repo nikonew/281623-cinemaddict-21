@@ -6,7 +6,7 @@ export default class FilmTitleView extends AbstractView {
   #filters = null;
   #activeFilter = null;
 
-  constructor(filters, activeFilter) {
+  constructor({filters, activeFilter}) {
     super();
     this.#filters = filters;
     this.#activeFilter = activeFilter;

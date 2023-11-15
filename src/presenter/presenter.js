@@ -61,7 +61,7 @@ export default class Presenter {
   #renderFilters() {
     this.#filtersPresenter = new FilmsFiltersPresenter({
       filtersContainer: this.#container,
-      films: this.#filmsList
+      films: this.#filmsList,
     });
   }
 

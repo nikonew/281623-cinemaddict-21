@@ -139,5 +139,7 @@ const filmItems = [
   }
 ];
 
-export const generateFilms = () => getRandomArrayElement(filmItems);
+let id = 0;
+
+export const generateFilms = () => ({...getRandomArrayElement(filmItems),id: id++});
 
