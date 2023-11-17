@@ -1,7 +1,6 @@
 import {render} from './framework/render.js';
 import Presenter from './presenter/presenter.js';
 import FilmsModel from './model/films-model.js';
-import SortView from './view/sort-films.js';
 import HeaderProfileView from './view/user-profile.js';
 
 const headerElement = document.querySelector('header');
@@ -15,7 +14,6 @@ const presenter = new Presenter({
 });
 
 render(new HeaderProfileView(), headerElement);
-render(new SortView(), mainElement);
 
 
 presenter.init();
