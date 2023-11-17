@@ -1,4 +1,4 @@
-import AbstractView from '../framework/view/abstract-view.js';
+import AbstractStatefulView from '../framework/view/abstract-view.js';
 
 
 function createFilmsCard (film){
@@ -26,7 +26,7 @@ function createFilmsCard (film){
 }
 
 
-export default class FilmsCardView extends AbstractView{
+export default class FilmsCardView extends AbstractStatefulView{
   #film = null;
   #handleClick = null;
   #handleControlButtonClick = null;
@@ -46,6 +46,8 @@ export default class FilmsCardView extends AbstractView{
   get template() {
     return createFilmsCard(this.#film);
   }
+
+  _restoreHandlers() {}
 
   #clickHandler = () => {
     this.#handleClick();

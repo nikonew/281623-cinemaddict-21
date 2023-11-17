@@ -1,5 +1,5 @@
 import {SortType} from '../const.js';
-import AbstractView from '../framework/view/abstract-view.js';
+import AbstractStatefulView from '../framework/view/abstract-stateful-view.js';
 
 
 function createSortTemplate (currentSortType){
@@ -16,7 +16,7 @@ function createSortTemplate (currentSortType){
     </ul>`;
 }
 
-export default class SortView extends AbstractView {
+export default class SortView extends AbstractStatefulView {
   #currentSortType = null;
   #handleSortTypeChange = null;
 

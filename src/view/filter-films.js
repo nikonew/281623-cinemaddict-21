@@ -1,4 +1,4 @@
-import AbstractView from '../framework/view/abstract-view.js';
+import AbstractStatefulView from '../framework/view/abstract-view.js';
 
 
 function createFilterTemplate (filters) {
@@ -10,7 +10,7 @@ function createFilterTemplate (filters) {
   </nav>`;
 }
 
-export default class FilterFilmsView extends AbstractView {
+export default class FilterFilmsView extends AbstractStatefulView {
   #filters = null;
 
   constructor({filters}) {

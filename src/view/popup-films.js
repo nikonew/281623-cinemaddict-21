@@ -1,4 +1,4 @@
-import AbstractView from '../framework/view/abstract-view.js';
+import AbstractStatefulView from '../framework/view/abstract-view.js';
 
 
 function createPopupTemplate (film, filmComments) {
@@ -132,7 +132,7 @@ function createPopupTemplate (film, filmComments) {
 </section>`;
 }
 
-export default class PopupFilmsView extends AbstractView {
+export default class PopupFilmsView extends AbstractStatefulView {
   #film = null;
   #filmComments = null;
   #handleCloseClick = null;
