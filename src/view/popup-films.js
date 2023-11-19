@@ -1,5 +1,6 @@
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
+import {DATA_FORMAT} from '../const.js';
 import AbstractStatefulView from '../framework/view/abstract-view.js';
 import {getTimeFromMin, humanizeFilmsDueDate} from '../util.js';
 
@@ -7,7 +8,7 @@ const EMOJIES = ['smile', 'sleeping', 'puke', 'angry'];
 
 dayjs.extend(relativeTime);
 
-const createAddEmojieComments = (currentEmoji) => (`
+const createAddEmojiComments = (currentEmoji) => (`
     <div class="film-details__add-emoji-label">
       ${currentEmoji ? `<img src="./images/emoji/${currentEmoji}.png" width="30" height="30" alt="emoji-${currentEmoji}">` : ''}
     </div>
@@ -30,7 +31,7 @@ function createPopupTemplate (state, filmComments, currentEmoji) {
   const {filmInfo, userDetails} = state;
   const { date } = state.filmInfo.release;
   const { duration } = state.filmInfo;
-  const createEmojiAndNewComments = createAddEmojieComments(currentEmoji);
+  const createEmojiAndNewComments = createAddEmojiComments(currentEmoji);
   return `
 <section class="film-details">
   <div class="film-details__inner">
@@ -72,7 +73,7 @@ function createPopupTemplate (state, filmComments, currentEmoji) {
             </tr>
             <tr class="film-details__row">
               <td class="film-details__term">Release Date</td>
-              <td class="film-details__cell">${humanizeFilmsDueDate(date)}</td>
+              <td class="film-details__cell">${humanizeFilmsDueDate(date, DATA_FORMAT.FILMS_POPUP)}</td>
             </tr>
             <tr class="film-details__row">
               <td class="film-details__term">Duration</td>

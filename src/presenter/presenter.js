@@ -1,5 +1,6 @@
-import {sortFilmDate, sortFilmRating, SORT_TYPE} from '../const.js';
+import {DATA_FORMAT, SORT_TYPE} from '../const.js';
 import {remove, render, RenderPosition} from '../framework/render.js';
+import {humanizeFilmsDueDate} from '../util.js';
 import FilmTitleView from '../view/film-title-view.js';
 import ShowMoreButtonView from '../view/films-button-show-more.js';
 import FilmListView from '../view/films-list-view.js';
@@ -94,10 +95,10 @@ export default class Presenter {
   #sortFilms(sortType) {
     switch (sortType) {
       case SORT_TYPE.DATE:
-        this.#filmsList.sort(sortFilmDate);
+        this.#filmsList.sort((a, b) => humanizeFilmsDueDate(b.filmInfo.release.date,DATA_FORMAT.FILMS_CARD) - humanizeFilmsDueDate(a.filmInfo.release.date, DATA_FORMAT.FILMS_CARD));
         break;
       case SORT_TYPE.RATING:
-        this.#filmsList.sort(sortFilmRating);
+        this.#filmsList.sort((a, b) => b.filmInfo.totalRating - a.filmInfo.totalRating);
         break;
       default:
         this.#filmsList = [...this.#filmsModel.filmsCard];

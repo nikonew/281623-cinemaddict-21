@@ -1,6 +1,6 @@
-import dayjs from 'dayjs';
+import {DATA_FORMAT} from '../const.js';
 import AbstractStatefulView from '../framework/view/abstract-view.js';
-import {getTimeFromMin} from '../util.js';
+import {getTimeFromMin, humanizeFilmsDueDate} from '../util.js';
 
 
 function createFilmsCard (film){
@@ -13,7 +13,7 @@ function createFilmsCard (film){
             <h3 class="film-card__title">${filmInfo.title}</h3>
             <p class="film-card__rating">${filmInfo.totalRating}</p>
             <p class="film-card__info">
-              <span class="film-card__year">${dayjs(date).year()}</span>
+              <span class="film-card__year">${humanizeFilmsDueDate(date, DATA_FORMAT.FILMS_CARD)}</span>
               <span class="film-card__duration">${getTimeFromMin(duration)}</span>
               <span class="film-card__genre">${filmInfo.genre[2]}</span>
             </p>

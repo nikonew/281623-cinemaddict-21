@@ -7,10 +7,8 @@ export const getRandomInteger = (a, b) => {
   return Math.floor(result);
 };
 
-const DATA_FORMAT = 'D MMM YYYY';
-
-export function humanizeFilmsDueDate (dueDate) {
-  return dueDate ? dayjs(dueDate).format(DATA_FORMAT) : '';
+export function humanizeFilmsDueDate (dueDate, format) {
+  return dueDate ? dayjs(dueDate).format(format) : '';
 }
 
 export const getTimeFromMin = (minutes) => `${Math.trunc(minutes / 60)}h ${minutes % 60}m`;
