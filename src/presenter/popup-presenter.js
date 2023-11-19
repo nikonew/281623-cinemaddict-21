@@ -5,9 +5,10 @@ import PopupFilmsView from '../view/popup-films.js';
 export default class FilmPopupPresenter {
   #filmPopup = null;
 
-  constructor({ film, filmComments, onControlBtnClick}) {
+  constructor({ film, filmComments, onControlBtnClick, onDeleteComment}) {
     this.#filmPopup = new PopupFilmsView({film, filmComments,
       onCloseClick: this.#closePopupClickHandler,onControlBtnClick,
+      onDeleteComment
     });
   }
 

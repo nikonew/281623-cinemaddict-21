@@ -1,4 +1,4 @@
-import {sortFilmDate, sortFilmRating, SortType} from '../const.js';
+import {sortFilmDate, sortFilmRating, SORT_TYPE} from '../const.js';
 import {remove, render, RenderPosition} from '../framework/render.js';
 import FilmTitleView from '../view/film-title-view.js';
 import ShowMoreButtonView from '../view/films-button-show-more.js';
@@ -26,7 +26,7 @@ export default class Presenter {
   #filmPresenter = new Map();
   #filtersPresenter = null;
   #sortComponent = null;
-  #currentSortType = SortType.DEFAULT;
+  #currentSortType = SORT_TYPE.DEFAULT;
 
 
   constructor({ container, filmsModel, filmFilters}) {
@@ -93,10 +93,10 @@ export default class Presenter {
 
   #sortFilms(sortType) {
     switch (sortType) {
-      case SortType.DATE:
+      case SORT_TYPE.DATE:
         this.#filmsList.sort(sortFilmDate);
         break;
-      case SortType.RATING:
+      case SORT_TYPE.RATING:
         this.#filmsList.sort(sortFilmRating);
         break;
       default:

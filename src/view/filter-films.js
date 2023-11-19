@@ -11,15 +11,14 @@ function createFilterTemplate (filters) {
 }
 
 export default class FilterFilmsView extends AbstractStatefulView {
-  #filters = null;
 
   constructor({filters}) {
     super();
-    this.#filters = filters;
+    this._state = filters;
   }
 
   get template() {
-    return createFilterTemplate(this.#filters);
+    return createFilterTemplate(this._state);
   }
 
 }

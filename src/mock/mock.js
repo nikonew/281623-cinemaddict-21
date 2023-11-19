@@ -45,7 +45,7 @@ const filmItems = [
         'date': '2019-05-11T00:00:00.000Z',
         'releaseCountry': 'Finland'
       },
-      'duration': 77,
+      'duration': '01h 20m',
       'genre': [
         'Comedy',
         'Drama',
@@ -84,7 +84,7 @@ const filmItems = [
         'date': '2018-05-11T00:00:00.000Z',
         'releaseCountry': 'Finland'
       },
-      'duration': 77,
+      'duration': '01h 20m',
       'genre': [
         'Comedy',
         'Drama',
@@ -122,7 +122,7 @@ const filmItems = [
         'date': '2017-05-11T00:00:00.000Z',
         'releaseCountry': 'Finland'
       },
-      'duration': 77,
+      'duration': '01h 20m',
       'genre': [
         'Comedy',
         'Drama',

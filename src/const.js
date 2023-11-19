@@ -3,10 +3,22 @@ export const Mode = {
   POPUP: 'popup'
 };
 
-export const SortType = {
+export const SORT_TYPE = {
   DEFAULT: 'default',
   DATE: 'date',
   RATING: 'rating',
+};
+
+export const USER_ACTION = {
+  UPDATE_FILM: 'UPDATE_FILM',
+  ADD_COMMENT: 'ADD_FILM',
+  DELETE_COMMENT: 'DELETE_FILM',
+};
+
+export const UPDATE_TYPE = {
+  PATCH: 'PATCH',
+  MINOR: 'MINOR',
+  MAJOR: 'MAJOR',
 };
 
 export function sortFilmDate(filmA, filmB) {

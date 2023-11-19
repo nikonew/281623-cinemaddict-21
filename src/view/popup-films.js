@@ -1,8 +1,36 @@
+import dayjs from 'dayjs';
+import relativeTime from 'dayjs/plugin/relativeTime';
 import AbstractStatefulView from '../framework/view/abstract-view.js';
+import {getTimeFromMin, humanizeFilmsDueDate} from '../util.js';
 
+const EMOJIES = ['smile', 'sleeping', 'puke', 'angry'];
 
-function createPopupTemplate (film, filmComments) {
-  const {filmInfo, userDetails} = film;
+dayjs.extend(relativeTime);
+
+const createAddEmojieComments = (currentEmoji) => (`
+    <div class="film-details__add-emoji-label">
+      ${currentEmoji ? `<img src="./images/emoji/${currentEmoji}.png" width="30" height="30" alt="emoji-${currentEmoji}">` : ''}
+    </div>
+    <label class="film-details__comment-label">
+      <textarea class="film-details__comment-input" placeholder="Select reaction below and write comment here"
+        name="comment"></textarea>
+    </label>
+    <div class="film-details__emoji-list">
+      ${EMOJIES.map((emotion) => `
+        <input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-${emotion}"
+          value="${emotion}" ${emotion === currentEmoji ? 'checked' : ''}>
+        <label class="film-details__emoji-label" for="emoji-${emotion}">
+          <img src="./images/emoji/${emotion}.png" width="30" height="30" alt="emoji">
+        </label>
+      `).join('')}
+    </div>
+`);
+
+function createPopupTemplate (state, filmComments, currentEmoji) {
+  const {filmInfo, userDetails} = state;
+  const { date } = state.filmInfo.release;
+  const { duration } = state.filmInfo;
+  const createEmojiAndNewComments = createAddEmojieComments(currentEmoji);
   return `
 <section class="film-details">
   <div class="film-details__inner">
@@ -44,11 +72,11 @@ function createPopupTemplate (film, filmComments) {
             </tr>
             <tr class="film-details__row">
               <td class="film-details__term">Release Date</td>
-              <td class="film-details__cell">30 March 1945</td>
+              <td class="film-details__cell">${humanizeFilmsDueDate(date)}</td>
             </tr>
             <tr class="film-details__row">
               <td class="film-details__term">Duration</td>
-              <td class="film-details__cell">1h 18m</td>
+              <td class="film-details__cell">${getTimeFromMin(duration)}</td>
             </tr>
             <tr class="film-details__row">
               <td class="film-details__term">Country</td>
@@ -90,41 +118,15 @@ function createPopupTemplate (film, filmComments) {
               <p class="film-details__comment-text">${element.comment}</p>
               <p class="film-details__comment-info">
                 <span class="film-details__comment-author">${element.author}</span>
-                <span class="film-details__comment-day">2019/12/31 23:59</span>
-                <button class="film-details__comment-delete">Delete</button>
+                <span class="film-details__comment-day">${dayjs(element.date).fromNow()}</span>
+                <button class="film-details__comment-delete" data-id=${element.id}>Delete</button>
               </p>
             </div></li>`
   ).join('')}
         </ul>
 
         <form class="film-details__new-comment" action="" method="get">
-          <div class="film-details__add-emoji-label"></div>
-
-          <label class="film-details__comment-label">
-            <textarea class="film-details__comment-input" placeholder="Select reaction below and write comment here" name="comment"></textarea>
-          </label>
-
-          <div class="film-details__emoji-list">
-            <input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-smile" value="smile">
-            <label class="film-details__emoji-label" for="emoji-smile">
-              <img src="./images/emoji/smile.png" width="30" height="30" alt="emoji">
-            </label>
-
-            <input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-sleeping" value="sleeping">
-            <label class="film-details__emoji-label" for="emoji-sleeping">
-              <img src="./images/emoji/sleeping.png" width="30" height="30" alt="emoji">
-            </label>
-
-            <input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-puke" value="puke">
-            <label class="film-details__emoji-label" for="emoji-puke">
-              <img src="./images/emoji/puke.png" width="30" height="30" alt="emoji">
-            </label>
-
-            <input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-angry" value="angry">
-            <label class="film-details__emoji-label" for="emoji-angry">
-              <img src="./images/emoji/angry.png" width="30" height="30" alt="emoji">
-            </label>
-          </div>
+           ${createEmojiAndNewComments}
         </form>
       </section>
     </div>
@@ -133,32 +135,46 @@ function createPopupTemplate (film, filmComments) {
 }
 
 export default class PopupFilmsView extends AbstractStatefulView {
-  #film = null;
   #filmComments = null;
   #handleCloseClick = null;
   #handleControlButtonClick = null;
+  #handleDeleteCommentClick = null;
 
-  constructor({film, filmComments, onCloseClick, onControlBtnClick}) {
+  constructor({film, filmComments, onCloseClick, onControlBtnClick, onDeleteComment}) {
     super();
-    this.#film = film;
+    this._state = film;
     this.#filmComments = filmComments;
 
     this.#handleCloseClick = onCloseClick;
     this.#handleControlButtonClick = onControlBtnClick;
+    this.#handleDeleteCommentClick = onDeleteComment;
+    this._restoreHandlers();
 
+  }
+
+  get template() {
+    return createPopupTemplate(this._state, this.#filmComments);
+  }
+
+  _restoreHandlers() {
     this.element.querySelector('.film-details__close-btn').addEventListener('click', this.#closeClickHandler);
     this.element.querySelector('.film-details__controls').addEventListener('click', this.#controlButtonsClickHandler);
-
     this.element.querySelector('.film-details__controls').addEventListener('click', (evt) => {
       if (evt.target.classList.contains('film-details__control-button')) {
         evt.target.classList.toggle('film-details__control-button--active');
       }
     });
+    this.element.querySelector('.film-details__emoji-list').addEventListener('change', this.#emojiChangeHandler);
+    this.element.querySelector('.film-details__comment-delete').addEventListener('click', this.#commentDeleteClickHandler);
   }
 
-  get template() {
-    return createPopupTemplate(this.#film, this.#filmComments);
-  }
+  #emojiChangeHandler = (evt) => {
+    const prevScroll = this.element.scrollTop;
+    this.updateElement({
+      currentEmoji: evt.target.value,
+    });
+    this.element.scrollTo(0, prevScroll);
+  };
 
   #closeClickHandler = () => {
     this.#handleCloseClick();
@@ -167,6 +183,12 @@ export default class PopupFilmsView extends AbstractStatefulView {
   #controlButtonsClickHandler = (evt) => {
     if (evt.target.classList.contains('film-details__control-button')) {
       this.#handleControlButtonClick(evt.target.dataset.userDetail);
+    }
+  };
+
+  #commentDeleteClickHandler = (evt) => {
+    if(evt.target.dataset.id){
+      this.#handleDeleteCommentClick(Number(evt.target.dataset.id));
     }
   };
 

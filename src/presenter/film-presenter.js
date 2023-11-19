@@ -1,3 +1,4 @@
+import {UPDATE_TYPE, USER_ACTION} from '../const.js';
 import { render, replace, remove } from '../framework/render.js';
 import FilmsCardView from '../view/films-card-view.js';
 import FilmPopupPresenter from './popup-presenter.js';
@@ -23,6 +24,7 @@ export default class FilmPresenter {
       film: this.#film,
       filmComments: this.#comments,
       onControlBtnClick: this.#handleControlButton,
+      onDeleteComment: this.#handleDeleteComment
     });
 
     const prevFilmComponent = this.#filmComponent;
@@ -69,5 +71,12 @@ export default class FilmPresenter {
     this.#handleUpdateFilm(this.#getUpdatedFilmByUserDetail(userDetail));
   };
 
+  #handleDeleteComment = (updatedFilm) => {
+    this.#handleUpdateFilm(
+      USER_ACTION.DELETE_COMMENT,
+      UPDATE_TYPE.PATCH,
+      updatedFilm
+    );
+  };
 
 }

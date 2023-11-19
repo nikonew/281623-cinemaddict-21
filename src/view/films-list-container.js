@@ -7,6 +7,7 @@ function createFilmsListContainer() {
 }
 
 export default class FilmsListContainerView extends AbstractView {
+
   get template() {
     return createFilmsListContainer();
   }
