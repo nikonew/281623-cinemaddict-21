@@ -62,7 +62,7 @@ export default class Presenter {
 
   #renderSort() {
     this.#sortComponent = new SortView({currentSortType: this.#currentSortType, onSortTypeChange: this.#handleSortTypeChange});
-    render(this.#sortComponent, this.#filmsListComponent.element, RenderPosition.AFTERBEGIN);
+    render(this.#sortComponent, this.#container, RenderPosition.BEFOREEND);
   }
 
   #renderFilters() {
