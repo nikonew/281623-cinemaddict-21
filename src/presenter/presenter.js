@@ -1,5 +1,5 @@
 import {DATA_FORMAT, SORT_TYPE} from '../const.js';
-import {remove, render, RenderPosition} from '../framework/render.js';
+import {remove, render} from '../framework/render.js';
 import {humanizeFilmsDueDate} from '../util.js';
 import FilmTitleView from '../view/film-title-view.js';
 import ShowMoreButtonView from '../view/films-button-show-more.js';
@@ -40,8 +40,9 @@ export default class Presenter {
   init() {
     this.#renderFilters();
     this.#renderSort();
-    this.#renderFilmsContainers ();
     this.#renderFilmsList();
+    this.#renderFilmsContainers ();
+
 
     if (this.#filmsList.length === 0) {
       this.#renderFilmListTitle();
@@ -62,7 +63,7 @@ export default class Presenter {
 
   #renderSort() {
     this.#sortComponent = new SortView({currentSortType: this.#currentSortType, onSortTypeChange: this.#handleSortTypeChange});
-    render(this.#sortComponent, this.#container, RenderPosition.BEFOREEND);
+    render(this.#sortComponent, this.#container);
   }
 
   #renderFilters() {
@@ -132,7 +133,6 @@ export default class Presenter {
     if (this.#currentSortType === sortType) {
       return;
     }
-    this.#currentSortType = sortType;
     this.#sortFilms(sortType);
     this.#clearFilmList();
     this.#renderFilmsList ();
