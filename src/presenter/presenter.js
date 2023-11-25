@@ -56,7 +56,8 @@ export default class Presenter {
   #renderFilms (film) {
     const filmPresenter = new FilmPresenter({
       filmContainer: this.#filmsListTemplate.element,
-      onDataChange: this.#handleUpdateFilm
+      currentFilterType: this.#filterModel.filter,
+      onDataChange: this.#handleUpdateFilm,
     });
     filmPresenter.init(film, this.#filmsModel);
     this.#filmPresenter.set(film.id, filmPresenter);
@@ -121,7 +122,7 @@ export default class Presenter {
   }
 
   #handleUpdateFilm = (updatedFilm) => {
-    this.#filmPresenter.get(updatedFilm.id).init(updatedFilm, this.#filmsModel);
+    this.#filmPresenter.get(updatedFilm.id).init(updatedFilm, this.films);
   };
 
   #handleSortTypeChange = (sortType) => {

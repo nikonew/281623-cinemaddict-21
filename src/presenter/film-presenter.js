@@ -10,21 +10,25 @@ export default class FilmPresenter {
   #handleUpdateFilm = null;
   #filmComponent = null;
   #popupPresenter = null;
+  #currentFilterType = null;
+  //#handleDeleteComment = null;
 
-  constructor({filmContainer, onDataChange}) {
+  constructor({filmContainer, onDataChange, currentFilterType}) {
     this.#filmContainer = filmContainer;
     this.#handleUpdateFilm = onDataChange;
+    this.#currentFilterType = currentFilterType;
   }
 
 
   init(film, filmsModel) {
+    console.log(film);
     this.#film = film;
     this.#comments = filmsModel.commentsList.filter((comment) => film.comments.includes(String(comment.id)));
     this.#popupPresenter = new FilmPopupPresenter({
       film: this.#film,
       filmComments: this.#comments,
       onControlBtnClick: this.#handleControlButton,
-      onDeleteComment: this.#handleDeleteComment
+      handleDeleteComment: this.#handleDeleteComment
     });
 
     const prevFilmComponent = this.#filmComponent;
@@ -52,24 +56,21 @@ export default class FilmPresenter {
     remove(this.#filmComponent);
   }
 
-  #getUpdatedFilmByUserDetail(userDetail) {
-
-    return {
-      ...this.#film,
-      userDetails: {
-        ...this.#film.userDetails,
-        [userDetail]: !this.#film.userDetails[userDetail],
-      }
-    };
-  }
-
   #handleClick = () => {
     this.#popupPresenter.showPopup();
   };
 
-  #handleControlButton = (userDetail) => {
-    this.#handleUpdateFilm(this.#getUpdatedFilmByUserDetail(userDetail));
+  #handleControlButton = (updatedUserDetails, controlFilter) => {
+    if (controlFilter === this.#currentFilterType) {
+      this.destroy();
+    }
+    this.#handleUpdateFilm(
+      USER_ACTION.UPDATE_FILM,
+      UPDATE_TYPE.PATCH,
+      {...this.#film, userDetails: updatedUserDetails}
+    );
   };
+
 
   #handleDeleteComment = (updatedFilm) => {
     this.#handleUpdateFilm(

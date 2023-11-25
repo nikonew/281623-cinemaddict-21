@@ -4,15 +4,28 @@ import PopupFilmsView from '../view/popup-films.js';
 
 export default class FilmPopupPresenter {
   #filmPopup = null;
+  #film = null;
+  #filmComments = null;
 
-  constructor({ film, filmComments, onControlBtnClick, onDeleteComment}) {
-    this.#filmPopup = new PopupFilmsView({film, filmComments,
-      onCloseClick: this.#closePopupClickHandler,onControlBtnClick,
-      onDeleteComment
-    });
+  #handleControlButton = null;
+  #handleDeleteComment = null;
+
+  constructor({ film, filmComments, onControlBtnClick, onDeleteComment }) {
+    this.#film = film;
+    this.#filmComments = filmComments;
+    this.#handleControlButton = onControlBtnClick;
+    this.#handleDeleteComment = onDeleteComment;
+
   }
 
   showPopup() {
+    this.#filmPopup = new PopupFilmsView({
+      film: this.#film,
+      filmComments: this.#filmComments,
+      onCloseClick: this.#closePopupClickHandler,
+      onControlBtnClick:this.#handleControlButton,
+      onDeleteComment: this.#handleDeleteComment
+    });
     document.body.classList.add('hide-overflow');
     document.body.appendChild(this.#filmPopup.element);
     document.addEventListener('keydown', this.#escKeyDownHandler);
