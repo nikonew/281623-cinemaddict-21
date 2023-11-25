@@ -10,7 +10,6 @@ import SortView from '../view/sort-films.js';
 import FilmPresenter from './film-presenter.js';
 import FilmsFiltersPresenter from './filters-presenter.js';
 
-// const updateItem = (items, update) => items.map((item) => item.id === update.id ? update : item);
 
 const FILM_COUNT_PER_STEP = 5;
 
