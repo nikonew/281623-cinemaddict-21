@@ -1,8 +1,8 @@
 export const FILTER_TYPE = {
-  ALL: 'All',
-  WATCHLIST: 'Watchlist',
-  HISTORY: 'History',
-  FAVORITES: 'Favorites'
+  ALL: 'all',
+  WATCHLIST: 'watchlist',
+  HISTORY: 'history',
+  FAVORITES: 'favorites'
 };
 
 export const SORT_TYPE = {

@@ -21,12 +21,10 @@ export default class FilmPresenter {
 
 
   init(film, filmsModel) {
-    console.log(film);
     this.#film = film;
-    this.#comments = filmsModel.commentsList.filter((comment) => film.comments.includes(String(comment.id)));
     this.#popupPresenter = new FilmPopupPresenter({
       film: this.#film,
-      filmComments: this.#comments,
+      filmComments: this.#comments = filmsModel.commentsList.filter((comment) => film.comments.includes(String(comment.id))),
       onControlBtnClick: this.#handleControlButton,
       handleDeleteComment: this.#handleDeleteComment
     });
@@ -60,15 +58,19 @@ export default class FilmPresenter {
     this.#popupPresenter.showPopup();
   };
 
-  #handleControlButton = (updatedUserDetails, controlFilter) => {
-    if (controlFilter === this.#currentFilterType) {
-      this.destroy();
-    }
-    this.#handleUpdateFilm(
-      USER_ACTION.UPDATE_FILM,
-      UPDATE_TYPE.PATCH,
-      {...this.#film, userDetails: updatedUserDetails}
-    );
+  #getUpdatedFilmByUserDetail(userDetail) {
+
+    return {
+      ...this.#film,
+      userDetails: {
+        ...this.#film.userDetails,
+        [userDetail]: !this.#film.userDetails[userDetail],
+      }
+    };
+  }
+
+  #handleControlButton = (userDetail) => {
+    this.#handleUpdateFilm(this.#getUpdatedFilmByUserDetail(userDetail));
   };
 
 

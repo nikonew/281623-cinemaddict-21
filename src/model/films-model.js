@@ -25,7 +25,7 @@ export default class FilmsModel extends Observable {
       ...this.#films.slice(index + 1),
     ];
 
-    this._notify(updateType, updatedFilm);
+    this._notify(updateType, update);
   }
 
   get commentsList () {

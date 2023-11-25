@@ -1,5 +1,5 @@
 import {DATA_FORMAT, SORT_TYPE, UPDATE_TYPE} from '../const.js';
-import {remove, render} from '../framework/render.js';
+import {remove, render, RenderPosition} from '../framework/render.js';
 import {humanizeFilmsDueDate} from '../util.js';
 import FilmTitleView from '../view/film-title-view.js';
 import ShowMoreButtonView from '../view/films-button-show-more.js';
@@ -38,17 +38,20 @@ export default class Presenter {
   }
 
   get films () {
+    const filterType = this.#filterModel.filter;
+    const filteredFilms = this.#filtersPresenter.filters[filterType].films;
+
     switch (this.#currentSortType) {
       case SORT_TYPE.DATE:
-        return [...this.#filmsModel.filmsCard].sort((a, b) => humanizeFilmsDueDate(b.filmInfo.release.date, DATA_FORMAT.FILMS_CARD) - humanizeFilmsDueDate(a.filmInfo.release.date, DATA_FORMAT.FILMS_CARD));
+        return filteredFilms.sort((a, b) => humanizeFilmsDueDate(b.filmInfo.release.date, DATA_FORMAT.FILMS_CARD) - humanizeFilmsDueDate(a.filmInfo.release.date, DATA_FORMAT.FILMS_CARD));
       case SORT_TYPE.RATING:
-        return [...this.#filmsModel.filmsCard].sort((a, b) => b.filmInfo.totalRating - a.filmInfo.totalRating);
+        return filteredFilms.sort((a, b) => b.filmInfo.totalRating - a.filmInfo.totalRating);
     }
-    return this.#filmsModel.filmsCard;
+    return filteredFilms;
   }
 
   init() {
-
+    this.#renderFilters();
     this.#renderPageFilm();
 
   }
@@ -75,8 +78,9 @@ export default class Presenter {
   }
 
   #renderSort() {
+    remove(this.#sortComponent);
     this.#sortComponent = new SortView({currentSortType: this.#currentSortType, onSortTypeChange: this.#handleSortTypeChange});
-    render(this.#sortComponent, this.#container);
+    render(this.#sortComponent, this.#filmsView.element, RenderPosition.BEFOREBEGIN);
   }
 
   #renderFilmsContainers () {
@@ -96,6 +100,7 @@ export default class Presenter {
   }
 
   #renderShowMoreBtn () {
+    remove(this.#button);
     if (this.films.length > FILM_COUNT_PER_STEP) {
       this.#button = new ShowMoreButtonView({onClick: this.#handleLoadMoreButtonClick});
       render(this.#button, this.#filmsListComponent.element);
@@ -130,6 +135,7 @@ export default class Presenter {
       return;
     }
     this.#currentSortType = sortType;
+    this.#renderSort();
     this.#clearFilmList();
     this.#renderFilmsList ();
   };
@@ -141,10 +147,9 @@ export default class Presenter {
   }
 
   #renderPageFilm () {
-    this.#renderFilters();
-    this.#renderSort();
     this.#renderFilmsList();
     this.#renderFilmsContainers ();
+    this.#renderSort();
 
     if (this.films.length === 0) {
       this.#renderFilmListTitle();
@@ -153,7 +158,6 @@ export default class Presenter {
   }
 
   #handleModelEvent = (updateType, data) => {
-    //this.#filmsList = [...this.#filmsModel.filmsCard];
 
     switch (updateType) {
       case UPDATE_TYPE.PATCH:
