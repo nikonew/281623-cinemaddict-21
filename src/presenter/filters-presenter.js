@@ -1,58 +1,113 @@
-import { render } from '../framework/render.js';
+import {FILTER_TYPE, UPDATE_TYPE} from '../const.js';
+import { render, replace, remove } from '../framework/render.js';
 import FilterFilmsView from '../view/filter-films.js';
 
 export default class FilmsFiltersPresenter {
   #filtersContainer = null;
-  #films = null;
+  #filmsModel = null;
+  #filterModel = null;
+  #filterComponent = null;
 
-  constructor({filtersContainer, films}) {
+  constructor({filtersContainer, filmsModel, filterModel}) {
     this.#filtersContainer = filtersContainer;
-    this.#films = films;
-    this.init();
+    this.#filmsModel = filmsModel;
+    this.#filterModel = filterModel;
+
+    this.#filmsModel.addObserver(this.#handleModelEvent);
+    this.#filterModel.addObserver(this.#handleModelEvent);
   }
 
-  init() {
+  get filters() {
+    const films = this.#filmsModel.filmsCard;
 
-    this.filters = {
+    const filters = {
       all: {
-        filterFilms: this.#films,
-        emptyFilmsMessage: 'There are no movies in our database'
+        type: FILTER_TYPE.ALL,
+        name: 'All movies',
+        emptyFilmsMessage: 'There are no movies in our database',
+        films: [...films]
       },
       watchlist: {
-        films: [],
-        emptyFilmsMessage: 'There are no movies to watch now'
+        type: FILTER_TYPE.WATCHLIST,
+        name: 'Watchlist',
+        emptyFilmsMessage: 'There are no movies to watch now',
+        films: []
       },
       history: {
-        films: [],
-        emptyFilmsMessage: 'There are no watched movies now'
+        type: FILTER_TYPE.HISTORY,
+        name: 'History',
+        emptyFilmsMessage: 'There are no watched movies now',
+        films: []
       },
       favorites: {
-        films: [],
-        emptyFilmsMessage: 'There are no favorite movies now'
+        type: FILTER_TYPE.FAVORITES,
+        name: 'Favorites',
+        emptyFilmsMessage: 'There are no favorite movies now',
+        films: []
       }
     };
 
-    this.#films.forEach((film) => {
+    films.forEach((film) => {
       if (film.userDetails.watchlist) {
-        this.filters.watchlist.films.push(film);
+        filters.watchlist.films.push(film);
       }
       if (film.userDetails.alreadyWatched) {
-        this.filters.history.films.push(film);
+        filters.history.films.push(film);
       }
       if (film.userDetails.favorite) {
-        this.filters.favorites.films.push(film);
+        filters.favorites.films.push(film);
       }
     });
 
-    this.#renderFilters();
-    this.activeFilter = document.querySelector('.main-navigation__item--active').dataset.id;
+    return filters;
+  }
+
+  init() {
+    const filters = this.filters;
+    //const prevUserRankComponent = this.#userRankComponent;
+    const prevFilterComponent = this.#filterComponent;
+
+    //const watchedFilmsQuantity = filters.history.films.length;
+
+    this.#filterComponent = new FilterFilmsView({
+      filters,
+      currentFilterType: this.#filterModel.filter,
+      onFilterTypeChange: this.#handleFilterTypeChange
+    });
+
+    // if (prevUserRankComponent === null) {
+    //   render(this.#userRankComponent, this.#userRankContainer);
+    // } else {
+    //   replace(this.#userRankComponent, prevUserRankComponent);
+    //   remove(prevUserRankComponent);
+    // }
+
+    if (prevFilterComponent === null) {
+      render(this.#filterComponent, this.#filtersContainer);
+    } else {
+      replace(this.#filterComponent, prevFilterComponent);
+      remove(prevFilterComponent);
+    }
+
+    // if (watchedFilmsQuantity === 0) {
+    //   remove(this.#userRankComponent);
+    //   this.#userRankComponent = null;
+    // }
 
   }
 
-  #renderFilters() {
-    render(new FilterFilmsView({
-      filters: this.filters
-    }), this.#filtersContainer);
-  }
+
+  #handleModelEvent = () => {
+    this.init();
+  };
+
+  #handleFilterTypeChange = (filterType) => {
+    if (this.#filterModel.filter === filterType) {
+      return;
+    }
+
+    this.#filterModel.setFilter(UPDATE_TYPE.MAJOR, filterType);
+  };
+
 
 }

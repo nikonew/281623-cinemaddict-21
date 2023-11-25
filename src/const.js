@@ -1,3 +1,9 @@
+export const FILTER_TYPE = {
+  ALL: 'All',
+  WATCHLIST: 'Watchlist',
+  HISTORY: 'History',
+  FAVORITES: 'Favorites'
+};
 
 export const SORT_TYPE = {
   DEFAULT: 'default',
@@ -15,6 +21,7 @@ export const UPDATE_TYPE = {
   PATCH: 'PATCH',
   MINOR: 'MINOR',
   MAJOR: 'MAJOR',
+  INIT: 'INIT',
 };
 
 export const DATA_FORMAT = {
