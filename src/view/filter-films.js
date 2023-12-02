@@ -1,12 +1,12 @@
 import AbstractStatefulView from '../framework/view/abstract-view.js';
 
 
-function createFilterTemplate (filters, currentFilterType) {
+function createFilterTemplate (state, currentFilterType) {
   return `<nav class="main-navigation">
-    <a href="#all" data-id="all" class="main-navigation__item ${filters.all.type === currentFilterType ? 'main-navigation__item--active' : ''}">${filters.all.name}</a>
-    <a href="#watchlist" data-id="watchlist" class="main-navigation__item ${filters.watchlist.type === currentFilterType ? 'main-navigation__item--active' : ''}">${filters.watchlist.name} <span class="main-navigation__item-count">${filters.watchlist.films.length}</span></a>
-    <a href="#history" data-id="history" class="main-navigation__item ${filters.history.type === currentFilterType ? 'main-navigation__item--active' : ''}">${filters.history.name} <span class="main-navigation__item-count">${filters.history.films.length}</span></a>
-    <a href="#favorites" data-id="favorites" class="main-navigation__item ${filters.favorites.type === currentFilterType ? 'main-navigation__item--active' : ''}">${filters.favorites.name} <span class="main-navigation__item-count">${filters.favorites.films.length}</span></a>
+    <a href="#all" data-id="all" class="main-navigation__item ${state.all.type === currentFilterType ? 'main-navigation__item--active' : ''}">${state.all.name}</a>
+    <a href="#watchlist" data-id="watchlist" class="main-navigation__item ${state.watchlist.type === currentFilterType ? 'main-navigation__item--active' : ''}">${state.watchlist.name} <span class="main-navigation__item-count">${state.watchlist.films.length}</span></a>
+    <a href="#history" data-id="history" class="main-navigation__item ${state.history.type === currentFilterType ? 'main-navigation__item--active' : ''}">${state.history.name} <span class="main-navigation__item-count">${state.history.films.length}</span></a>
+    <a href="#favorites" data-id="favorites" class="main-navigation__item ${state.favorites.type === currentFilterType ? 'main-navigation__item--active' : ''}">${state.favorites.name} <span class="main-navigation__item-count">${state.favorites.films.length}</span></a>
   </nav>`;
 }
 

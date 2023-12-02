@@ -20,6 +20,7 @@ export default class Presenter {
   #filmsListTemplate = new FilmsListContainerView();
   #filmsModel = null;
   #filterModel = null;
+  #commentsModel = null;
   #container = null;
   #button = null;
   #filmPresenter = new Map();
@@ -28,19 +29,20 @@ export default class Presenter {
   #currentSortType = SORT_TYPE.DEFAULT;
   #filtersPresenter = null;
 
-  constructor({ container, filmsModel, filterModel}) {
+  constructor({ container, filmsModel, filterModel, commentsModel}) {
     this.#container = container;
     this.#filmsModel = filmsModel;
     this.#filterModel = filterModel;
+    this.#commentsModel = commentsModel;
 
     this.#filmsModel.addObserver(this.#handleModelEvent);
     this.#filterModel.addObserver(this.#handleModelEvent);
+    this.#commentsModel.addObserver(this.#handleModelEvent);
   }
 
   get films () {
     const filterType = this.#filterModel.filter;
     const filteredFilms = this.#filtersPresenter.filters[filterType].films;
-
     switch (this.#currentSortType) {
       case SORT_TYPE.DATE:
         return filteredFilms.sort((a, b) => humanizeFilmsDueDate(b.filmInfo.release.date, DATA_FORMAT.FILMS_CARD) - humanizeFilmsDueDate(a.filmInfo.release.date, DATA_FORMAT.FILMS_CARD));
@@ -48,6 +50,11 @@ export default class Presenter {
         return filteredFilms.sort((a, b) => b.filmInfo.totalRating - a.filmInfo.totalRating);
     }
     return filteredFilms;
+  }
+
+
+  get comments() {
+    return this.#commentsModel.comments;
   }
 
   init() {
@@ -61,6 +68,7 @@ export default class Presenter {
       filmContainer: this.#filmsListTemplate.element,
       currentFilterType: this.#filterModel.filter,
       onDataChange: this.#handleUpdateFilm,
+      commentsModel: this.comments
     });
     filmPresenter.init(film, this.#filmsModel);
     this.#filmPresenter.set(film.id, filmPresenter);

@@ -2,7 +2,7 @@ export const FILTER_TYPE = {
   ALL: 'all',
   WATCHLIST: 'watchlist',
   HISTORY: 'history',
-  FAVORITES: 'favorites'
+  FAVORITES: 'favorite'
 };
 
 export const SORT_TYPE = {
@@ -13,8 +13,8 @@ export const SORT_TYPE = {
 
 export const USER_ACTION = {
   UPDATE_FILM: 'UPDATE_FILM',
-  ADD_COMMENT: 'ADD_FILM',
-  DELETE_COMMENT: 'DELETE_FILM',
+  ADD_COMMENT: 'ADD_COMMENT',
+  DELETE_COMMENT: 'DELETE_COMMENT',
 };
 
 export const UPDATE_TYPE = {

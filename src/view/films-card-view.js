@@ -31,20 +31,21 @@ function createFilmsCard (film){
 
 
 export default class FilmsCardView extends AbstractStatefulView{
+  #film = null;
   #handleClick = null;
   #handleControlButtonClick = null;
 
 
   constructor({film,onClick, onControlBtnClick}) {
     super();
-    this._state = film;
+    this.#film = film;
     this.#handleClick = onClick;
     this.#handleControlButtonClick = onControlBtnClick;
     this._restoreHandlers();
   }
 
   get template() {
-    return createFilmsCard(this._state);
+    return createFilmsCard(this.#film);
   }
 
   _restoreHandlers() {
