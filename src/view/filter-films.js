@@ -1,4 +1,4 @@
-import AbstractStatefulView from '../framework/view/abstract-view.js';
+import AbstractStatefulView from '../framework/view/abstract-stateful-view.js';
 
 
 function createFilterTemplate (state, currentFilterType) {
@@ -19,12 +19,15 @@ export default class FilterFilmsView extends AbstractStatefulView {
     this._state = filters;
     this.#currentFilter = currentFilterType;
     this.#handleFilterTypeChange = onFilterTypeChange;
-
-    this.element.addEventListener('click', this.#filterTypeChangeHandler);
+    this._restoreHandlers();
   }
 
   get template() {
     return createFilterTemplate(this._state, this.#currentFilter);
+  }
+
+  _restoreHandlers(){
+    this.element.addEventListener('click', this.#filterTypeChangeHandler);
   }
 
   #filterTypeChangeHandler = (evt) => {

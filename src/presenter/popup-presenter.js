@@ -24,7 +24,7 @@ export default class FilmPopupPresenter {
       filmComments: this.#filmComments,
       onCloseClick: this.#closePopupClickHandler,
       onControlBtnClick:this.#handleControlButton,
-      //onDeleteComment: this.#handleDeleteComment
+      onDeleteComment: this.#handleDeleteComment
     });
     document.body.classList.add('hide-overflow');
     document.body.appendChild(this.#filmPopup.element);
