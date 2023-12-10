@@ -1,5 +1,5 @@
-import {DATA_FORMAT, SORT_TYPE, UPDATE_TYPE} from '../const.js';
-import {remove, render} from '../framework/render.js';
+import {DATA_FORMAT, SORT_TYPE, UPDATE_TYPE, USER_ACTION} from '../const.js';
+import {remove, render, RenderPosition} from '../framework/render.js';
 import {humanizeFilmsDueDate} from '../util.js';
 import FilmTitleView from '../view/film-title-view.js';
 import ShowMoreButtonView from '../view/films-button-show-more.js';
@@ -20,6 +20,7 @@ export default class Presenter {
   #filmsListTemplate = new FilmsListContainerView();
   #filmsModel = null;
   #filterModel = null;
+  #commentsModel = null;
   #container = null;
   #button = null;
   #filmPresenter = new Map();
@@ -28,27 +29,36 @@ export default class Presenter {
   #currentSortType = SORT_TYPE.DEFAULT;
   #filtersPresenter = null;
 
-  constructor({ container, filmsModel, filterModel}) {
+  constructor({ container, filmsModel, filterModel, commentsModel}) {
     this.#container = container;
     this.#filmsModel = filmsModel;
     this.#filterModel = filterModel;
+    this.#commentsModel = commentsModel;
 
     this.#filmsModel.addObserver(this.#handleModelEvent);
     this.#filterModel.addObserver(this.#handleModelEvent);
+    this.#commentsModel.addObserver(this.#handleModelEvent);
   }
 
   get films () {
+    const filterType = this.#filterModel.filter;
+    const filteredFilms = this.#filtersPresenter.filters[filterType].films;
     switch (this.#currentSortType) {
       case SORT_TYPE.DATE:
-        return [...this.#filmsModel.filmsCard].sort((a, b) => humanizeFilmsDueDate(b.filmInfo.release.date, DATA_FORMAT.FILMS_CARD) - humanizeFilmsDueDate(a.filmInfo.release.date, DATA_FORMAT.FILMS_CARD));
+        return filteredFilms.sort((a, b) => humanizeFilmsDueDate(b.filmInfo.release.date, DATA_FORMAT.FILMS_CARD) - humanizeFilmsDueDate(a.filmInfo.release.date, DATA_FORMAT.FILMS_CARD));
       case SORT_TYPE.RATING:
-        return [...this.#filmsModel.filmsCard].sort((a, b) => b.filmInfo.totalRating - a.filmInfo.totalRating);
+        return filteredFilms.sort((a, b) => b.filmInfo.totalRating - a.filmInfo.totalRating);
     }
-    return this.#filmsModel.filmsCard;
+    return filteredFilms;
+  }
+
+
+  get comments() {
+    return this.#commentsModel.comments;
   }
 
   init() {
-
+    this.#renderFilters();
     this.#renderPageFilm();
 
   }
@@ -57,7 +67,8 @@ export default class Presenter {
     const filmPresenter = new FilmPresenter({
       filmContainer: this.#filmsListTemplate.element,
       currentFilterType: this.#filterModel.filter,
-      onDataChange: this.#handleUpdateFilm,
+      onDataChange: this.#handleViewAction,
+      commentsModel: this.comments
     });
     filmPresenter.init(film, this.#filmsModel);
     this.#filmPresenter.set(film.id, filmPresenter);
@@ -75,8 +86,9 @@ export default class Presenter {
   }
 
   #renderSort() {
+    remove(this.#sortComponent);
     this.#sortComponent = new SortView({currentSortType: this.#currentSortType, onSortTypeChange: this.#handleSortTypeChange});
-    render(this.#sortComponent, this.#container);
+    render(this.#sortComponent, this.#filmsView.element, RenderPosition.BEFOREBEGIN);
   }
 
   #renderFilmsContainers () {
@@ -96,6 +108,7 @@ export default class Presenter {
   }
 
   #renderShowMoreBtn () {
+    remove(this.#button);
     if (this.films.length > FILM_COUNT_PER_STEP) {
       this.#button = new ShowMoreButtonView({onClick: this.#handleLoadMoreButtonClick});
       render(this.#button, this.#filmsListComponent.element);
@@ -121,15 +134,12 @@ export default class Presenter {
     remove(this.#filmTitleView);
   }
 
-  #handleUpdateFilm = (updatedFilm) => {
-    this.#filmPresenter.get(updatedFilm.id).init(updatedFilm, this.films);
-  };
-
   #handleSortTypeChange = (sortType) => {
     if (this.#currentSortType === sortType) {
       return;
     }
     this.#currentSortType = sortType;
+    this.#renderSort();
     this.#clearFilmList();
     this.#renderFilmsList ();
   };
@@ -141,10 +151,9 @@ export default class Presenter {
   }
 
   #renderPageFilm () {
-    this.#renderFilters();
-    this.#renderSort();
     this.#renderFilmsList();
     this.#renderFilmsContainers ();
+    this.#renderSort();
 
     if (this.films.length === 0) {
       this.#renderFilmListTitle();
@@ -152,8 +161,15 @@ export default class Presenter {
     this.#renderShowMoreBtn ();
   }
 
+  #handleViewAction = (actionType, updateType, update) => {
+    switch (actionType) {
+      case USER_ACTION.DELETE_COMMENT:
+        this.#commentsModel.deleteComments(updateType, update);
+        break;
+    }
+  };
+
   #handleModelEvent = (updateType, data) => {
-    //this.#filmsList = [...this.#filmsModel.filmsCard];
 
     switch (updateType) {
       case UPDATE_TYPE.PATCH:

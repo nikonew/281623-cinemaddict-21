@@ -5,7 +5,7 @@ import FilmPopupPresenter from './popup-presenter.js';
 
 export default class FilmPresenter {
   #film = null;
-  #comments = null;
+  #commentsModel = null;
   #filmContainer = null;
   #handleUpdateFilm = null;
   #filmComponent = null;
@@ -13,20 +13,19 @@ export default class FilmPresenter {
   #currentFilterType = null;
   //#handleDeleteComment = null;
 
-  constructor({filmContainer, onDataChange, currentFilterType}) {
+  constructor({filmContainer, onDataChange, currentFilterType, commentsModel}) {
     this.#filmContainer = filmContainer;
     this.#handleUpdateFilm = onDataChange;
     this.#currentFilterType = currentFilterType;
+    this.#commentsModel = commentsModel;
   }
 
 
-  init(film, filmsModel) {
-    console.log(film);
+  init(film) {
     this.#film = film;
-    this.#comments = filmsModel.commentsList.filter((comment) => film.comments.includes(String(comment.id)));
     this.#popupPresenter = new FilmPopupPresenter({
       film: this.#film,
-      filmComments: this.#comments,
+      filmComments: this.#commentsModel,
       onControlBtnClick: this.#handleControlButton,
       handleDeleteComment: this.#handleDeleteComment
     });
@@ -37,7 +36,6 @@ export default class FilmPresenter {
       onClick: this.#handleClick,
       onControlBtnClick: this.#handleControlButton,
     });
-
 
     if (prevFilmComponent === null) {
       render(this.#filmComponent, this.#filmContainer);
@@ -60,17 +58,19 @@ export default class FilmPresenter {
     this.#popupPresenter.showPopup();
   };
 
-  #handleControlButton = (updatedUserDetails, controlFilter) => {
-    if (controlFilter === this.#currentFilterType) {
-      this.destroy();
-    }
-    this.#handleUpdateFilm(
-      USER_ACTION.UPDATE_FILM,
-      UPDATE_TYPE.PATCH,
-      {...this.#film, userDetails: updatedUserDetails}
-    );
-  };
+  #getUpdatedFilmByUserDetail(userDetail) {
+    return {
+      ...this.#film,
+      userDetails: {
+        ...this.#film.userDetails,
+        [userDetail]: !this.#film.userDetails[userDetail],
+      }
+    };
+  }
 
+  #handleControlButton = (userDetail) => {
+    this.#handleUpdateFilm(this.#getUpdatedFilmByUserDetail(userDetail));
+  };
 
   #handleDeleteComment = (updatedFilm) => {
     this.#handleUpdateFilm(
@@ -79,5 +79,6 @@ export default class FilmPresenter {
       updatedFilm
     );
   };
+
 
 }
