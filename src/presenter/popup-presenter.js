@@ -10,11 +10,11 @@ export default class FilmPopupPresenter {
   #handleControlButton = null;
   #handleDeleteComment = null;
 
-  constructor({ film, filmComments, onControlBtnClick, onDeleteComment }) {
+  constructor({ film, filmComments, onControlBtnClick, handleDeleteComment }) {
     this.#film = film;
     this.#filmComments = filmComments;
     this.#handleControlButton = onControlBtnClick;
-    this.#handleDeleteComment = onDeleteComment;
+    this.#handleDeleteComment = handleDeleteComment;
 
   }
 

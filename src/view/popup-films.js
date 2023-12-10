@@ -29,7 +29,7 @@ const createAddEmojiComments = (userEmoji) => (`
 `);
 
 function createPopupTemplate(state) {
-  const {comments} = state;
+  const {comments, isDeleting} = state;
   const {filmInfo, userDetails} = state;
   const { date } = state.filmInfo.release;
   const { duration } = state.filmInfo;
@@ -109,7 +109,7 @@ function createPopupTemplate(state) {
 
     <div class="film-details__bottom-container">
       <section class="film-details__comments-wrap">
-        <h3 class="film-details__comments-title">Comments <span class="film-details__comments-count">4</span></h3>
+        <h3 class="film-details__comments-title">Comments <span class="film-details__comments-count">${comments.length}</span></h3>
 
         <ul class="film-details__comments-list">
             ${comments.map((element) => {
@@ -124,7 +124,7 @@ function createPopupTemplate(state) {
               <p class="film-details__comment-info">
                 <span class="film-details__comment-author">${element.author}</span>
                 <span class="film-details__comment-day">${dayjs(element.date).fromNow()}</span>
-                <button class="film-details__comment-delete" data-id=${element.id}>Delete</button>
+                <button class="film-details__comment-delete" data-id=${element.id} ${isDeleting ? 'disabled="disabled"' : ''}>Delete</button>
               </p>
             </div></li>`);
   }).join('')}
@@ -140,7 +140,6 @@ function createPopupTemplate(state) {
 }
 
 export default class PopupFilmsView extends AbstractStatefulView {
-  #film = null;
   #handleCloseClick = null;
   #handleControlButtonClick = null;
   #handleDeleteCommentClick = null;
@@ -174,7 +173,7 @@ export default class PopupFilmsView extends AbstractStatefulView {
       }
     });
     this.element.querySelector('.film-details__emoji-list').addEventListener('change', this.#emojiChangeHandler);
-    this.element.querySelector('.film-details__comment-delete').addEventListener('click', this.#commentDeleteClickHandler);
+    this.element.querySelector('.film-details__comment-delete').addEventListener('click', this.#deleteCommentClickHandler);
   }
 
   #emojiChangeHandler = (evt) => {
@@ -195,17 +194,26 @@ export default class PopupFilmsView extends AbstractStatefulView {
     }
   };
 
-  #commentDeleteClickHandler = (evt) => {
-    if (evt.target.dataset.id) {
-      //this.#deletedId = evt.target.dataset.id;
-      this.#handleDeleteCommentClick(evt.target.dataset.id);
+  #deleteCommentClickHandler = (evt) => {
+    if (evt.target.tagName !== 'BUTTON') {
+      return;
     }
+
+    const movie = PopupFilmsView.parseStateToFilm(this._state);
+    const commentId = movie.comments.find((comment) => comment === evt.target.dataset.id);
+    const commentDelete = {
+      id: movie.id,
+      comment: commentId
+    };
+
+    this.#handleDeleteCommentClick(commentDelete);
   };
 
   static parseFilmToState (film, comments){
     return {...film,
       userEmoji: '',
       text: '',
+      isDeleting: false,
       comments: [...comments]};
   }
 
@@ -216,6 +224,7 @@ export default class PopupFilmsView extends AbstractStatefulView {
 
     delete film.userEmoji;
     delete film.text;
+    delete film.isDeleting;
 
     return film;
   }

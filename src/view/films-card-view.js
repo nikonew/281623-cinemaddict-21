@@ -4,7 +4,7 @@ import {getTimeFromMin, humanizeFilmsDueDate} from '../util.js';
 
 
 function createFilmsCard (film){
-  const {filmInfo, userDetails} = film;
+  const {filmInfo, comments, userDetails} = film;
   const { duration} = film.filmInfo;
   const { date } = film.filmInfo.release;
   return (`
@@ -19,7 +19,7 @@ function createFilmsCard (film){
             </p>
             <img src="${filmInfo.poster}" alt="" class="film-card__poster">
             <p class="film-card__description">${filmInfo.description}</p>
-            <span class="film-card__comments">5 comments</span>
+            <span class="film-card__comments">${comments.length} comments</span>
           </a>
           <div class="film-card__controls">
             <button class="film-card__controls-item film-card__controls-item--add-to-watchlist ${userDetails.watchlist ? 'film-card__controls-item--active' : ''}" data-user-detail="watchlist" type="button">Add to watchlist</button>

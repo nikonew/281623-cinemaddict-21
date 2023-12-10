@@ -1,4 +1,4 @@
-import {DATA_FORMAT, SORT_TYPE, UPDATE_TYPE} from '../const.js';
+import {DATA_FORMAT, SORT_TYPE, UPDATE_TYPE, USER_ACTION} from '../const.js';
 import {remove, render, RenderPosition} from '../framework/render.js';
 import {humanizeFilmsDueDate} from '../util.js';
 import FilmTitleView from '../view/film-title-view.js';
@@ -67,7 +67,7 @@ export default class Presenter {
     const filmPresenter = new FilmPresenter({
       filmContainer: this.#filmsListTemplate.element,
       currentFilterType: this.#filterModel.filter,
-      onDataChange: this.#handleUpdateFilm,
+      onDataChange: this.#handleViewAction,
       commentsModel: this.comments
     });
     filmPresenter.init(film, this.#filmsModel);
@@ -134,10 +134,6 @@ export default class Presenter {
     remove(this.#filmTitleView);
   }
 
-  #handleUpdateFilm = (updatedFilm) => {
-    this.#filmPresenter.get(updatedFilm.id).init(updatedFilm, this.films);
-  };
-
   #handleSortTypeChange = (sortType) => {
     if (this.#currentSortType === sortType) {
       return;
@@ -164,6 +160,14 @@ export default class Presenter {
     }
     this.#renderShowMoreBtn ();
   }
+
+  #handleViewAction = (actionType, updateType, update) => {
+    switch (actionType) {
+      case USER_ACTION.DELETE_COMMENT:
+        this.#commentsModel.deleteComments(updateType, update);
+        break;
+    }
+  };
 
   #handleModelEvent = (updateType, data) => {
 

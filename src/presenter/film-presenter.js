@@ -72,11 +72,11 @@ export default class FilmPresenter {
     this.#handleUpdateFilm(this.#getUpdatedFilmByUserDetail(userDetail));
   };
 
-  #handleDeleteComment = (comment) => {
+  #handleDeleteComment = (updatedFilm) => {
     this.#handleUpdateFilm(
       USER_ACTION.DELETE_COMMENT,
       UPDATE_TYPE.PATCH,
-      comment
+      updatedFilm
     );
   };
 
